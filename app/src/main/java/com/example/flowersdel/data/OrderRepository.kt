@@ -17,6 +17,6 @@ class OrderRepository(private val orderDao: OrderDao) {
     fun getOrderById(orderId: Int): Flow<Order?> = orderDao.getOrderById(orderId)
 
 
-    fun getOrdersByUser(userId: Int): List<Order> = orderDao.getOrdersByUser(userId)
+
 
 }

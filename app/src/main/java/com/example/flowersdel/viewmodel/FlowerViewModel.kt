@@ -31,7 +31,7 @@ class FlowerViewModel(private val repository: FlowerRepository) : ViewModel() {
         repository.deleteFlower(flower)
     }
 
-    fun getFlowerById(flowerId: Int): LiveData<Flower> = repository.getFlowerById(flowerId).asLiveData()
+    fun getFlowerById(flowerId: Int): LiveData<Flower?> = repository.getFlowerById(flowerId).asLiveData()
 }
 @Preview
 @Composable

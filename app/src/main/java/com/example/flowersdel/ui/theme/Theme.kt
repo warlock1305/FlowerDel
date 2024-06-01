@@ -14,7 +14,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
-import androidx.compose.material3.Typography
+
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
@@ -65,7 +65,7 @@ fun FlowersDelTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = kotlin.text.Typography,
+        typography = Typography,
         content = content
     )
 }

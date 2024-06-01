@@ -1,10 +1,13 @@
 package com.example.flowersdel.viewmodel
 
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.flowersdel.data.Order
 import com.example.flowersdel.data.OrderRepository
 import kotlinx.coroutines.launch
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.asLiveData
 
 class OrderViewModel(private val repository: OrderRepository) : ViewModel() {
 
@@ -21,6 +24,8 @@ class OrderViewModel(private val repository: OrderRepository) : ViewModel() {
     fun deleteOrder(order: Order) = viewModelScope.launch {
         repository.deleteOrder(order)
     }
+    fun getOrderById(orderId: Int): LiveData<Order?> {
+        return repository.getOrderById(orderId).asLiveData()
+    }
 
-    fun getOrdersByUser(userId: Int) = repository.getOrdersByUser(userId)
 }
