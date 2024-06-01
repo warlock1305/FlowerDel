@@ -38,6 +38,10 @@ android {
 
 dependencies {
 
+    implementation ("androidx.compose.ui:ui:1.0.0")
+    implementation ("androidx.compose.material:material:1.0.0")
+    implementation ("androidx.compose.ui:ui-tooling-preview:1.0.0")
+    debugImplementation ("androidx.compose.ui:ui-tooling:1.0.0")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -55,6 +59,8 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation ("androidx.compose.material3:material3:1.0.0-alpha14")
+    implementation ("com.github.bumptech.glide:glide:4.12.0")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
     //ROOM
     val room_version = "2.6.1"
     implementation("androidx.room:room-runtime:$room_version")
