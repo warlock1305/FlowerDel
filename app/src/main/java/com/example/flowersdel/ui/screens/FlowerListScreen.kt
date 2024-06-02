@@ -41,6 +41,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.util.Base64
 import android.util.Log
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -56,6 +57,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
@@ -77,6 +79,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -104,16 +107,14 @@ fun FlowerListScreen(navController: NavController, viewModel: FlowerViewModel = 
         topBar = {
             TopAppBar(
                 title = { Text("Flower List") },
-                colors = TopAppBarDefaults.smallTopAppBarColors()
+                colors = TopAppBarDefaults.smallTopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primary
+                ),
             )
         },
-        floatingActionButton = {
-            FloatingActionButton(onClick = { navController.navigate("addFlower") }) {
-                Icon(Icons.Filled.Add, contentDescription = "Add Flower")
-            }
-        }
-    ) {
+    ) {innerPadding ->
         LazyColumn(
+            modifier = Modifier.padding(innerPadding),
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
         ) {
             items(items = flowers, key = { flower -> flower.id }) { flower ->
@@ -132,13 +133,15 @@ fun FlowerCard(flower: Flower, modifier: Modifier = Modifier) {
         shape = RoundedCornerShape(corner = CornerSize(8.dp)),
         modifier = modifier.padding(8.dp)
     ) {
-        Column(
-            modifier = Modifier.padding(16.dp)
-        ) {
-            val context = LocalContext.current
+        Column {
             AndroidView(
                 factory = { context ->
                     ImageView(context).apply {
+                        scaleType = ImageView.ScaleType.FIT_XY
+                        layoutParams = ViewGroup.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT
+                        )
                         Glide.with(context)
                             .load(flower.imageUrl)
                             .into(this)
@@ -146,12 +149,19 @@ fun FlowerCard(flower: Flower, modifier: Modifier = Modifier) {
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(200.dp)
+                    .wrapContentHeight()
             )
-            Text(text = flower.name, style = MaterialTheme.typography.headlineSmall)
-            Text(text = flower.description, style = MaterialTheme.typography.bodyMedium)
-            Text(text = "$${flower.price}", style = MaterialTheme.typography.labelMedium)
+
+            Column(
+                modifier = Modifier.padding(16.dp)
+            ) {
+                val context = LocalContext.current
+                Text(text = flower.name, style = MaterialTheme.typography.headlineSmall)
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(text = "Price: $${flower.price}", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
+            }
         }
+
     }
 }
 
@@ -166,3 +176,6 @@ fun PreviewFlowerCard() {
     )
     FlowerCard(flower = sampleFlower)
 }
+
+
+
