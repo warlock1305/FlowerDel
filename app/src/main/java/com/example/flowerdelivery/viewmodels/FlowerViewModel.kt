@@ -1,5 +1,7 @@
 package com.example.flowersdel.viewmodel
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
@@ -10,7 +12,7 @@ import com.example.flowerdelivery.data.FlowerRepository
 
 class FlowerViewModel(private val repository: FlowerRepository) : ViewModel() {
 
-    val allFlowers = repository.allFlowers.asLiveData()
+    val allFlowers = repository.allFlowers
 
     fun addFlower(flower: Flower) = viewModelScope.launch {
         repository.addFlower(flower)
