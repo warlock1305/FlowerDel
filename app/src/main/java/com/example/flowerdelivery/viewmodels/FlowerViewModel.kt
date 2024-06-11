@@ -1,6 +1,7 @@
 package com.example.flowerdelivery.viewmodels
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
@@ -26,5 +27,8 @@ class FlowerViewModel(private val repository: FlowerRepository) : ViewModel() {
         repository.deleteFlower(flower)
     }
 
-    fun getFlowerById(flowerId: Int): LiveData<Flower?> = repository.getFlowerById(flowerId).asLiveData()
+    fun getFlowerById(flowerId: Int): LiveData<Flower?> {
+
+        return repository.getFlowerById(flowerId).asLiveData()
+    }
 }
