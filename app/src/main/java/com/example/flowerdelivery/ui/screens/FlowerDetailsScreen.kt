@@ -1,4 +1,4 @@
-package com.example.flowersdel.ui.screens
+package com.example.flowerdelivery.ui.screens
 
 import android.annotation.SuppressLint
 import android.view.ViewGroup
@@ -17,6 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -27,14 +28,17 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.bumptech.glide.Glide
-import com.example.flowersdel.viewmodel.FlowerViewModel
+import com.example.flowerdelivery.FlowerDeliveryApplication
+import com.example.flowerdelivery.viewmodels.FlowerViewModel
+import com.example.flowerdelivery.viewmodels.FlowerViewModelFactory
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FlowerDetailsScreen(navController: NavController, flowerId: Int) {
-    val viewModel: FlowerViewModel = viewModel()
-    val flower = viewModel.getFlowerById(flowerId).observeAsState().value
+    val application = LocalContext.current.applicationContext as FlowerDeliveryApplication
+    val flowerViewModel: FlowerViewModel = viewModel(factory = FlowerViewModelFactory.factory(application))
+    val flower = flowerViewModel.getFlowerById(flowerId).observeAsState().value
 
     Scaffold(
         topBar = {

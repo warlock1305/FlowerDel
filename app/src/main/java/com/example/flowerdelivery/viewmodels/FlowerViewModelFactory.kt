@@ -1,4 +1,4 @@
-package com.example.flowersdel.viewmodel
+package com.example.flowerdelivery.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -6,32 +6,19 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.flowerdelivery.FlowerDeliveryApplication
-import com.example.flowerdelivery.data.FlowerRepository
 import com.example.flowerdelivery.viewmodels.FeedbackViewModel
 import com.example.flowerdelivery.viewmodels.OrderViewModel
 
-
 object FlowerViewModelFactory {
-    val Factory = viewModelFactory {
+    fun factory(application: FlowerDeliveryApplication) = viewModelFactory {
         initializer {
-            FlowerViewModel(
-                FlowerDeliveryApplication().container.flowerRepository
-            )
+            FeedbackViewModel(application.container.feedbackRepository)
         }
         initializer {
-            FeedbackViewModel(
-                FlowerDeliveryApplication().container.feedbackRepository
-            )
+            OrderViewModel(application.container.orderRepository)
         }
         initializer {
-            OrderViewModel(
-                FlowerDeliveryApplication().container.orderRepository
-            )
+            FlowerViewModel(application.container.flowerRepository)
         }
-
     }
 }
-
-fun CreationExtras.flowerDeliveryApplication(): FlowerDeliveryApplication = (
-        this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY]
-                as FlowerDeliveryApplication)

@@ -20,6 +20,9 @@ interface FlowerDao {
     @Delete
     suspend fun deleteFlower(flower: Flower)
 
+    @Query("DELETE FROM flowers")
+    suspend fun deleteAll()
+
     @Query("SELECT * FROM flowers")
     fun getAllFlowers(): Flow<List<Flower>>
 

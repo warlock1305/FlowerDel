@@ -1,4 +1,4 @@
-package com.example.flowersdel.viewmodel
+package com.example.flowerdelivery.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel

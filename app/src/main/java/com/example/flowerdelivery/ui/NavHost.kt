@@ -12,11 +12,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.flowerdelivery.Greeting
 import com.example.flowerdelivery.ui.screens.FeedbackScreen
+import com.example.flowerdelivery.ui.screens.FlowerDetailsScreen
+import com.example.flowerdelivery.ui.screens.FlowerListScreen
 import com.example.flowerdelivery.ui.theme.FlowerDeliveryTheme
-import com.example.flowersdel.ui.screens.FlowerDetailsScreen
-import com.example.flowersdel.ui.screens.FlowerListScreen
+
 
 
 @Composable
