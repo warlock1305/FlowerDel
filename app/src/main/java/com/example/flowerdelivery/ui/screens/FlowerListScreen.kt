@@ -102,7 +102,7 @@ fun FlowerCard(flower: Flower, modifier: Modifier = Modifier) {
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .wrapContentHeight()
+                    .aspectRatio(1.5f) // Set the aspect ratio to 1:1 for square images
             )
 
             Column(

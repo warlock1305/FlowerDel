@@ -45,8 +45,8 @@ fun FlowerDetailsScreen(navController: NavController, flowerId: Int) {
             TopAppBar(
                 title = { Text("Flower Details") },
                 navigationIcon = {
-                    IconButton(onClick = {}) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
                     }
                 },
                 colors = TopAppBarDefaults.smallTopAppBarColors(
@@ -65,7 +65,7 @@ fun FlowerDetailsScreen(navController: NavController, flowerId: Int) {
                             scaleType = ImageView.ScaleType.FIT_XY
                             layoutParams = ViewGroup.LayoutParams(
                                 ViewGroup.LayoutParams.MATCH_PARENT,
-                                ViewGroup.LayoutParams.WRAP_CONTENT
+                                1000
                             )
                             Glide.with(context)
                                 .load(flower.imageUrl)

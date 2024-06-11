@@ -1,22 +1,18 @@
 package com.example.flowerdelivery.data
 
+import com.example.flowerdelivery.data.Order
+import com.example.flowerdelivery.data.OrderDao
 import kotlinx.coroutines.flow.Flow
 
 class OrderRepository(private val orderDao: OrderDao) {
-    val allOrders = orderDao.getAllOrders()
 
-    suspend fun addOrder(order: Order) = orderDao.insertOrder(order)
+    val allOrders: Flow<List<Order>> = orderDao.getAllOrders()
 
+    suspend fun insertOrder(order: Order) {
+        orderDao.insertOrder(order)
+    }
 
-    suspend fun updateOrder(order: Order) = orderDao.updateOrder(order)
-
-
-    suspend fun deleteOrder(order: Order) = orderDao.deleteOrder(order)
-
-
-    fun getOrderById(orderId: Int): Flow<Order?> = orderDao.getOrderById(orderId)
-
-
-    fun getOrdersByUser(userId: Int): List<Order> = orderDao.getOrdersByUser(userId)
-
+    fun getOrderById(orderId: Int): Flow<Order?> {
+        return orderDao.getOrderById(orderId)
+    }
 }

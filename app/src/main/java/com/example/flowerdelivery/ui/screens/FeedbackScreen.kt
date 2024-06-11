@@ -12,12 +12,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.flowerdelivery.FlowerDeliveryApplication
+import com.example.flowerdelivery.data.Feedback
 import com.example.flowerdelivery.viewmodels.FeedbackViewModel
 import com.example.flowerdelivery.viewmodels.FlowerViewModelFactory
 
@@ -27,6 +30,10 @@ import com.example.flowerdelivery.viewmodels.FlowerViewModelFactory
 fun FeedbackScreen(navController: NavController) {
     val application = LocalContext.current.applicationContext as FlowerDeliveryApplication
     val feedbackViewModel: FeedbackViewModel = viewModel(factory = FlowerViewModelFactory.factory(application))
+
+    var rating by remember { mutableStateOf(5f) }
+    var message by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
 
     Scaffold(
         topBar = {
@@ -46,10 +53,6 @@ fun FeedbackScreen(navController: NavController) {
                 .background(Color.White),
             contentAlignment = Alignment.Center
         ) {
-            var rating by remember { mutableStateOf(5f) }
-            var feedback by remember { mutableStateOf("") }
-            var email by remember { mutableStateOf("") }
-
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
@@ -59,9 +62,8 @@ fun FeedbackScreen(navController: NavController) {
             ) {
                 Text(
                     text = "Rate our services:",
-                    style = MaterialTheme.typography.titleLarge
+                    style = TextStyle(fontSize = 24.sp)
                 )
-                Spacer(modifier = Modifier.padding(8.dp))
                 Slider(
                     value = rating,
                     onValueChange = { rating = it },
@@ -75,26 +77,24 @@ fun FeedbackScreen(navController: NavController) {
                     text = "Rating: ${rating.toInt()}",
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
-                Spacer(modifier = Modifier.padding(8.dp))
                 Text(
                     text = "Feedback:",
-                    style = MaterialTheme.typography.titleMedium,
+                    style = TextStyle(fontSize = 24.sp),
                     modifier = Modifier.align(Alignment.Start)
                 )
                 TextField(
-                    value = feedback,
-                    onValueChange = { feedback = it },
+                    value = message,
+                    onValueChange = { message = it },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(200.dp)
                         .padding(8.dp),
                     label = { Text(text = "Enter your feedback") },
-                    shape = RoundedCornerShape(16.dp),
+                    shape = RoundedCornerShape(16.dp)
                 )
-                Spacer(modifier = Modifier.padding(8.dp))
                 Text(
                     text = "Email:",
-                    style = MaterialTheme.typography.titleMedium,
+                    style = TextStyle(fontSize = 24.sp),
                     modifier = Modifier.align(Alignment.Start)
                 )
                 TextField(
@@ -104,26 +104,26 @@ fun FeedbackScreen(navController: NavController) {
                     modifier = Modifier
                         .padding(8.dp)
                         .fillMaxWidth(),
-                    shape = RoundedCornerShape(16.dp),
+                    shape = RoundedCornerShape(16.dp)
                 )
-                Spacer(modifier = Modifier.padding(16.dp))
                 Button(
-                    onClick = { /* Handle submit button click */ },
+                    onClick = {
+                        val feedback = Feedback(
+                            rating = rating.toInt(),
+                            message = message,
+                            email = email
+                        )
+                        feedbackViewModel.addFeedback(feedback)
+                        // Optionally, navigate to another screen
+                        navController.navigateUp()
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 8.dp),
-                    elevation = null
+                        .padding(vertical = 8.dp)
                 ) {
                     Text(text = "Submit")
                 }
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun FeedbackScreenPreview() {
-    val navController = rememberNavController()
-    FeedbackScreen(navController = navController)
 }
