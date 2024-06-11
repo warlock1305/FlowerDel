@@ -11,24 +11,17 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun orderDao(): OrderDao
     abstract fun feedbackDao(): FeedbackDao
 
-    companion object {
+    companion object{
         @Volatile
-        private var INSTANCE: AppDatabase? = null
+        private var Instance: AppDatabase? = null
 
         fun getDatabase(context: Context): AppDatabase {
-            val tempInstance = INSTANCE
-            if(tempInstance != null){
-                return tempInstance
-            }
-            synchronized(this) {
-                val instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    AppDatabase::class.java,
-                    "app_database"
-                ).build()
-                INSTANCE = instance
-                return instance
+            // if the Instance is not null, return it, otherwise create a new database instance.
+            return Instance ?: synchronized(this) {
+                Room.databaseBuilder(context, AppDatabase::class.java, "StudentAPPDatabase")
+                    .build().also { Instance = it }
             }
         }
+
     }
 }

@@ -2,14 +2,36 @@ package com.example.flowersdel.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.CreationExtras
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.flowerdelivery.FlowerDeliveryApplication
 import com.example.flowerdelivery.data.FlowerRepository
+import com.example.flowerdelivery.viewmodels.FeedbackViewModel
+import com.example.flowerdelivery.viewmodels.OrderViewModel
 
-class FlowerViewModelFactory(private val repository: FlowerRepository) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(FlowerViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return FlowerViewModel(repository) as T
+
+object FlowerViewModelFactory {
+    val Factory = viewModelFactory {
+        initializer {
+            FlowerViewModel(
+                FlowerDeliveryApplication().container.flowerRepository
+            )
         }
-        throw IllegalArgumentException("Unknown ViewModel class")
+        initializer {
+            FeedbackViewModel(
+                FlowerDeliveryApplication().container.feedbackRepository
+            )
+        }
+        initializer {
+            OrderViewModel(
+                FlowerDeliveryApplication().container.orderRepository
+            )
+        }
+
     }
 }
+
+fun CreationExtras.flowerDeliveryApplication(): FlowerDeliveryApplication = (
+        this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY]
+                as FlowerDeliveryApplication)
