@@ -23,5 +23,4 @@ class OrderViewModel(private val repository: OrderRepository) : ViewModel() {
         repository.deleteOrder(order)
     }
 
-    fun getOrdersByUser(userId: Int) = repository.getOrdersByUser(userId)
 }
