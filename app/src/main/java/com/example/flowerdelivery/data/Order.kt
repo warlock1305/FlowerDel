@@ -9,5 +9,8 @@ data class Order(
     val userId: Int,
     val flowerId: Int,
     val quantity: Int,
-    val orderDate: Long
+    val orderDate: Long,
+    val address: String,
+    val productIds: List<Int>,
+    val productQuantities: List<Int>
 )

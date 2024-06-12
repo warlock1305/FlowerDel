@@ -51,7 +51,7 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "MutableCollectionMutableState")
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
 fun FlowerListScreen(navController: NavController) {
@@ -59,7 +59,8 @@ fun FlowerListScreen(navController: NavController) {
     val flowerViewModel: FlowerViewModel = viewModel(factory = FlowerViewModelFactory.factory(application))
     val flowers = flowerViewModel.allFlowers.collectAsState(initial = emptyList()).value
     var cartVisible by remember { mutableStateOf(false) }
-    val cartItems = remember { mutableStateMapOf<Int, Int>() }
+    var cartItems by remember { mutableStateOf(mutableMapOf<Int, Int>()) }
+
 
     Scaffold(
         topBar = {
@@ -122,8 +123,15 @@ fun FlowerListScreen(navController: NavController) {
                         cartItems = cartItems,
                         flowers = flowers,
                         onClose = { cartVisible = false },
-                        onRemoveItem = { flowerId -> cartItems.remove(flowerId) },
-                        onIncreaseQuantity = { flowerId -> cartItems[flowerId] = cartItems[flowerId]!! + 1 },
+                        onRemoveItem = { flowerId ->
+                            cartItems.remove(flowerId)
+                            cartItems = cartItems.toMutableMap()
+                        },
+                        onIncreaseQuantity = { flowerId ->
+                            cartItems[flowerId] = cartItems[flowerId]!! + 1
+                            cartItems = cartItems.toMutableMap()
+                        }
+                        ,
                         onDecreaseQuantity = { flowerId ->
                             val currentQuantity = cartItems[flowerId] ?: 0
                             if (currentQuantity > 1) {
@@ -131,6 +139,7 @@ fun FlowerListScreen(navController: NavController) {
                             } else {
                                 cartItems.remove(flowerId)
                             }
+                            cartItems = cartItems.toMutableMap()
                         }
                     )
                 }
@@ -186,6 +195,11 @@ fun FlowerCard(flower: Flower, onAddToCart: () -> Unit, modifier: Modifier = Mod
 }
 
 
+fun handleBuyAction(address: String, dateTime: Instant) {
+    // Handle buy action here
+    // You can use the address and dateTime as needed
+}
+
 @Composable
 fun CartScreen(
     cartItems: Map<Int, Int>,
@@ -232,7 +246,7 @@ fun CartScreen(
                 LazyColumn(
                     modifier = Modifier.weight(1f)
                 ) {
-                    items(cartFlowers) { flower ->
+                    items(cartFlowers, key = { it.id }){ flower ->
                         val quantity = cartItems[flower.id] ?: 0
                         Column(modifier = Modifier.padding(bottom = 16.dp)) {
                             AndroidView(
@@ -324,9 +338,4 @@ fun CartScreen(
             }
         }
     }
-}
-
-fun handleBuyAction(address: String, dateTime: Instant) {
-    // Handle buy action here
-    // You can use the address and dateTime as needed
 }
