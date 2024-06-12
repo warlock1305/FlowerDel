@@ -16,5 +16,5 @@ class OrderRepository(private val orderDao: OrderDao) {
 
     fun getOrderById(orderId: Int): Flow<Order?> = orderDao.getOrderById(orderId)
 
-
+    fun deleteOrderById(orderId: Int) = orderDao.deleteOrderById(orderId)
 }

@@ -25,4 +25,7 @@ interface OrderDao {
     @Query("SELECT * FROM orders WHERE id = :orderId")
     fun getOrderById(orderId: Int): Flow<Order>
 
+    @Query("DELETE FROM orders WHERE id = :orderId")
+    fun deleteOrderById(orderId: Int)
+
 }

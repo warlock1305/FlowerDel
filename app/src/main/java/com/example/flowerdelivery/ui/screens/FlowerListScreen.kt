@@ -188,6 +188,7 @@ fun FlowerCard(flower: Flower, onAddToCart: () -> Unit, modifier: Modifier = Mod
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CartScreen(
     cartItems: Map<Int, Int>,
@@ -203,6 +204,8 @@ fun CartScreen(
     val currentDateTime = remember { Clock.System.now() }
     var address by remember { mutableStateOf("") }
     var isDialogOpen by remember { mutableStateOf(false) }
+    var addressError by remember { mutableStateOf(false) }
+    var showEmptyCartAlert by remember { mutableStateOf(false) } // State for showing empty cart alert
 
     Surface(
         modifier = Modifier
@@ -281,13 +284,37 @@ fun CartScreen(
                 }
             }
 
+            // Buy Button and Address Entry Dialog
             Button(
-                onClick = { isDialogOpen = true },
+                onClick = {
+                    if (cartItems.isEmpty()) {
+                        showEmptyCartAlert = true // Show alert if cart is empty
+                    } else {
+                        isDialogOpen = true // Show address entry dialog if cart is not empty
+                    }
+                },
                 modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp)
             ) {
                 Text(text = "Buy")
             }
 
+            // Alert dialog for empty cart
+            if (showEmptyCartAlert) {
+                AlertDialog(
+                    onDismissRequest = { showEmptyCartAlert = false },
+                    title = { Text("Empty Cart") },
+                    text = { Text("Your shopping cart is empty.") },
+                    confirmButton = {
+                        Button(
+                            onClick = { showEmptyCartAlert = false }
+                        ) {
+                            Text("OK")
+                        }
+                    }
+                )
+            }
+
+            // Address Entry Dialog
             if (isDialogOpen) {
                 AlertDialog(
                     onDismissRequest = { isDialogOpen = false },
@@ -296,9 +323,24 @@ fun CartScreen(
                         Column {
                             TextField(
                                 value = address,
-                                onValueChange = { address = it },
-                                label = { Text("Address") }
+                                onValueChange = {
+                                    address = it
+                                    addressError = it.isBlank()
+                                },
+                                label = { Text("Address") },
+                                isError = addressError,
+                                colors = TextFieldDefaults.textFieldColors(
+                                    errorIndicatorColor = Color.Red,
+                                    errorLabelColor = Color.Red
+                                )
                             )
+                            if (addressError && address.isBlank()) {
+                                Text(
+                                    text = "This is a required field",
+                                    color = Color.Red,
+                                    modifier = Modifier.padding(top = 4.dp)
+                                )
+                            }
                             Text(
                                 text = "Current Time: ${currentDateTime.toLocalDateTime(TimeZone.currentSystemDefault())}",
                                 color = Color.Gray,
@@ -309,17 +351,21 @@ fun CartScreen(
                     confirmButton = {
                         Button(
                             onClick = {
-                                val orderDate = currentDateTime.toEpochMilliseconds()
-                                val productIds = cartItems.keys.toList()
-                                val productQuantities = productIds.map { cartItems.getValue(it) }
-                                val order = Order(
-                                    orderDate = formatDate(orderDate),
-                                    address = address,
-                                    productIds = productIds,
-                                    productQuantities = productQuantities
-                                )
-                                orderViewModel.addOrder(order) // Add order to the database
-                                isDialogOpen = false
+                                if (address.isBlank()) {
+                                    addressError = true
+                                } else {
+                                    val orderDate = currentDateTime.toEpochMilliseconds()
+                                    val productIds = cartItems.keys.toList()
+                                    val productQuantities = productIds.map { cartItems.getValue(it) }
+                                    val order = Order(
+                                        orderDate = formatDate(orderDate),
+                                        address = address,
+                                        productIds = productIds,
+                                        productQuantities = productQuantities
+                                    )
+                                    orderViewModel.addOrder(order)
+                                    isDialogOpen = false
+                                }
                             }
                         ) {
                             Text("Buy")
@@ -337,6 +383,8 @@ fun CartScreen(
         }
     }
 }
+
+
 
 fun formatDate(timestamp: Long): String {
     // Convert timestamp to Instant
