@@ -52,7 +52,8 @@ android {
 }
 
 dependencies {
-   // kapt("groupId:artifactId:version")
+   implementation(libs.protolite.well.known.types)
+    // kapt("groupId:artifactId:version")
     val room_version = "2.6.1"
 
     implementation("androidx.room:room-runtime:$room_version")
@@ -78,6 +79,7 @@ dependencies {
     implementation(libs.androidx.runtime.livedata)
     implementation ("com.github.bumptech.glide:glide:4.12.0")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.2.1")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
