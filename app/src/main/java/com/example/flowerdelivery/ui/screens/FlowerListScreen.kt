@@ -269,7 +269,7 @@ fun CartScreen(
                                 }
                                 Spacer(modifier = Modifier.width(130.dp))
                                 IconButton(onClick = { onRemoveItem(flower.id) }) {
-                                    Icon(Icons.Default.Close, contentDescription = "Increase Quantity")
+                                    Icon(Icons.Default.Close, contentDescription = "Remove Item")
                                 }
                             }
                         }
