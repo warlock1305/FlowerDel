@@ -22,6 +22,7 @@ class OrderViewModel(private val repository: OrderRepository) : ViewModel() {
     fun deleteOrder(order: Order) = viewModelScope.launch {
         repository.deleteOrder(order)
     }
-
-    fun getOrdersByUser(userId: Int) = repository.getOrdersByUser(userId)
+    fun deleteOrderById(id: Int) = viewModelScope.launch {
+        repository.deleteOrderById(id)
+    }
 }

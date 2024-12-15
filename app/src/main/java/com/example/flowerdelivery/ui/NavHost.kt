@@ -12,11 +12,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.flowerdelivery.Greeting
+import androidx.navigation.navArgument
 import com.example.flowerdelivery.ui.screens.FeedbackScreen
 import com.example.flowerdelivery.ui.screens.FlowerDetailsScreen
 import com.example.flowerdelivery.ui.screens.FlowerListScreen
 import com.example.flowerdelivery.ui.theme.FlowerDeliveryTheme
+
 
 
 @Composable
@@ -33,8 +34,11 @@ fun AppNavigation(navController: NavHostController) {
         composable(Screen.FlowerList.route) {
             FlowerListScreen(navController)
         }
-        composable(Screen.FlowerDetail.route) { backStackEntry ->
-            val flowerId = requireNotNull(backStackEntry.arguments?.getInt("flowerId"))
+        composable(
+            route = Screen.FlowerDetail.route,
+            arguments = listOf(navArgument("flowerId") { type = androidx.navigation.NavType.IntType })
+        ) { backStackEntry ->
+            val flowerId = backStackEntry.arguments?.getInt("flowerId") ?: 0
             FlowerDetailsScreen(navController, flowerId)
         }
         composable(Screen.Feedback.route) {

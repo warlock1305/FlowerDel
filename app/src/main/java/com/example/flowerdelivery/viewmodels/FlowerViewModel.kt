@@ -1,5 +1,8 @@
-package com.example.flowersdel.viewmodel
+package com.example.flowerdelivery.viewmodels
 
+import android.app.Application
+import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
@@ -10,7 +13,7 @@ import com.example.flowerdelivery.data.FlowerRepository
 
 class FlowerViewModel(private val repository: FlowerRepository) : ViewModel() {
 
-    val allFlowers = repository.allFlowers.asLiveData()
+    val allFlowers = repository.allFlowers
 
     fun addFlower(flower: Flower) = viewModelScope.launch {
         repository.addFlower(flower)
@@ -24,5 +27,8 @@ class FlowerViewModel(private val repository: FlowerRepository) : ViewModel() {
         repository.deleteFlower(flower)
     }
 
-    fun getFlowerById(flowerId: Int): LiveData<Flower?> = repository.getFlowerById(flowerId).asLiveData()
+    fun getFlowerById(flowerId: Int): LiveData<Flower?> {
+
+        return repository.getFlowerById(flowerId).asLiveData()
+    }
 }
